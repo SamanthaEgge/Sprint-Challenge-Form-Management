@@ -4,13 +4,15 @@ import * as Yup from 'yup';
 import axios from 'axios'
 import { Redirect } from 'react-router-dom'
 import { Button } from 'semantic-ui-react'
-// import useToken from '../../hooks/useToken'
+import useToken from '../../hooks/useToken'
 
 import './Login.scss'
 
 function Login({ touched, errors}) {
-  const token = localStorage.getItem('token');
+  // const token = localStorage.getItem('token');
+  const [token, settingToken] = useToken()
   const [login, setLogin] = useState('login')
+  console.log(token)
 
   if (token) {
     return <Redirect to='/' />
@@ -84,7 +86,7 @@ export default withFormik({
   }),
   handleSubmit(values, formikBag) {
     console.log('im in da handle submit')
-    console.log(formikBag.props)
+    console.log('formikBag.props: ', formikBag.props)
     {formikBag.props.login === 'login' ? 
     axios
       .post('http://localhost:5000/api/login', values)
