@@ -4,14 +4,13 @@ import * as Yup from 'yup';
 import axios from 'axios'
 import { Redirect } from 'react-router-dom'
 import { Button } from 'semantic-ui-react'
-import useToken from '../../hooks/useToken'
+// import useToken from '../../hooks/useToken'
 
 import './Login.scss'
 
 function Login({ touched, errors}) {
-  // const token = localStorage.getItem('token');
+  const token = localStorage.getItem('token');
   const [login, setLogin] = useState('login')
-  const [token, setToken] = useToken()
 
   if (token) {
     return <Redirect to='/' />

@@ -2,12 +2,9 @@ import { useState } from 'react'
 
 const useToken = (key) => {
   console.log('useToken CL :', key)
-  const [ token, setToken ] = useState(() => {
-    const item = localStorage.getItem(token)
-    {item ? setToken(item) : setToken(null)}
-  })
-
+  const [ token, setToken ] = useState()
   localStorage.setItem('token', key)
+  setToken(localStorage.getItem('token'))
   console.log(token)
 
   return [token, setToken]
