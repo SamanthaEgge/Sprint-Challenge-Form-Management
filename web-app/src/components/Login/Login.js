@@ -5,13 +5,13 @@ import axios from 'axios'
 import { Redirect } from 'react-router-dom'
 import { Button } from 'semantic-ui-react'
 import useToken from '../../hooks/useToken'
+import useLogin from '../../hooks/useLogin'
 
 import './Login.scss'
 
-function Login({ touched, errors}) {
+function Login({ touched, errors, loginValue}) {
   const [token, settingToken] = useToken()
-  const [login, setLogin] = useState('login')
-  // console.log(token)
+  const [login, setLogin] = useLogin('login')
 
   if (token !== 'undefined') {
     console.log('were in the redirect')
@@ -87,30 +87,30 @@ export default withFormik({
   }),
   handleSubmit(values, formikBag) {
     console.log('im in da handle submit')
-    console.log('formikBag.props: ', formikBag.props)
-    {formikBag.props.login === 'login' ? 
+    console.log('formikBag.props.login', formikBag.props.login)
+    {formikBag.props.login === 'registration' ? 
     axios
       .post('http://localhost:5000/api/login', values)
       .then((response) => {
-        localStorage.setItem('token', response.data.token);
         console.log('checking for token data:', response.data.token)
-        formikBag.props.history.push('/');
         formikBag.props.settingToken(response.data.token)
+        formikBag.props.history.push('/');
       })
       .catch((e) => {
-        console.log(e.response);
+        console.log(e.response)
+        console.log('we hit login catch');
       }) :
     axios
       .post('http://localhost:5000/api/register', values)
       .then((response) => {
-        formikBag.props.settingToken(response.data.token)
-        localStorage.setItem('token', response.data.token)
+        // localStorage.setItem('token', response.data.token)
         console.log('checking for token data:', response.data.token)
-        formikBag.props.history.push('/');
         formikBag.props.settingToken(response.data.token)
+        formikBag.props.history.push('/');
       })
       .catch((e) => {
-        console.log(e.response);
+        console.log(e.response)
+        console.log('we hit register catch');
       })
   }
 }
