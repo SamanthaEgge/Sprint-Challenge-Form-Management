@@ -87,8 +87,8 @@ export default withFormik({
   }),
   handleSubmit(values, formikBag) {
     console.log('im in da handle submit')
-    console.log('formikBag.props.login', formikBag.props.login)
-    {formikBag.props.login === 'registration' ? 
+    console.log('formikBag.props.login', formikBag.props.loginValue)
+    {formikBag.props.loginValue === 'login' ? 
     axios
       .post('http://localhost:5000/api/login', values)
       .then((response) => {
