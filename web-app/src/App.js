@@ -1,5 +1,6 @@
 import React, { useState, useEffect }from 'react';
 import { Route, Link } from 'react-router-dom';
+import PrivateRoute from './utils/PrivateRoute'
 
 import './App.scss';
 import Login from './components/Login/Login'
@@ -39,8 +40,8 @@ function App() {
         </div>
       </header>
       <div className='app-body'>
-        <Route exact path='/' component={Home} />
-        <Route exact path='/login' component={Login} />
+        <PrivateRoute exact path='/' component={Home} />
+        <Route exact path='/login' render={(props) => <Login {...props} setToken={setToken} />} />
       </div>
     </div>
   );

@@ -4,12 +4,14 @@ import * as Yup from 'yup';
 import axios from 'axios'
 import { Redirect } from 'react-router-dom'
 import { Button } from 'semantic-ui-react'
+import useToken from '../../hooks/useToken'
 
 import './Login.scss'
 
 function Login({ touched, errors}) {
-  const token = localStorage.getItem('token');
+  // const token = localStorage.getItem('token');
   const [login, setLogin] = useState('login')
+  const [token, setToken] = useToken()
 
   if (token) {
     return <Redirect to='/' />
@@ -30,7 +32,7 @@ function Login({ touched, errors}) {
   return(
     <>
     <div className='login-header'>
-      <h2>Login</h2>
+      <h2>{login === 'login' ? 'Login' : 'Register'}</h2>
     </div>
     <div className='registration-check'>
       <Button.Group size='large'>
@@ -83,14 +85,15 @@ export default withFormik({
   }),
   handleSubmit(values, formikBag) {
     console.log('im in da handle submit')
-    {formikBag.login === 'login' ? 
+    console.log(formikBag.props)
+    {formikBag.props.login === 'login' ? 
     axios
       .post('http://localhost:5000/api/login', values)
       .then((response) => {
-        localStorage.setItem('token', response);
-        console.log('checking for token data:', response)
+        localStorage.setItem('token', response.data.token);
+        console.log('checking for token data:', response.data.token)
         formikBag.props.history.push('/');
-        // formikBag.props.setToken(response.data.payload)
+        formikBag.props.setToken(response.data.token)
       })
       .catch((e) => {
         console.log(e.response);
@@ -98,10 +101,11 @@ export default withFormik({
     axios
       .post('http://localhost:5000/api/register', values)
       .then((response) => {
-        localStorage.setItem('token', response);
-        console.log('checking for token data:', response)
+        // setToken(response.data.token)
+        localStorage.setItem('token', response.data.token)
+        console.log('checking for token data:', response.data.token)
         formikBag.props.history.push('/');
-        // formikBag.props.setToken(response)
+        formikBag.props.setToken(response.data.token)
       })
       .catch((e) => {
         console.log(e.response);
