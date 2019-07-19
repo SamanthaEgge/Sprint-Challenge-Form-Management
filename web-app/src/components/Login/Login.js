@@ -59,6 +59,7 @@ function Login({ touched, errors}) {
           autoComplete='off'
           />
         <p>{touched.password && errors.password}</p>
+        <button className="btn">Submit &larr;</button>
       </div>
     </Form>
     </>
@@ -81,28 +82,29 @@ export default withFormik({
       .min(6)
   }),
   handleSubmit(values, formikBag) {
+    console.log('im in da handle submit')
     {formikBag.login === 'login' ? 
     axios
-      .post('http://localhost:6000/api/login', values)
+      .post('http://localhost:5000/api/login', values)
       .then((response) => {
-        localStorage.setItem('token', response.data.payload);
-        console.log('checking for token data:', response.data.payload)
+        localStorage.setItem('token', response);
+        console.log('checking for token data:', response)
         formikBag.props.history.push('/');
-        formikBag.props.setToken(response.data.payload)
+        // formikBag.props.setToken(response.data.payload)
       })
       .catch((e) => {
-        console.log(e.response.data);
+        console.log(e.response);
       }) :
     axios
-      .post('http://localhost:6000/api/register', values)
+      .post('http://localhost:5000/api/register', values)
       .then((response) => {
-        localStorage.setItem('token', response.data.payload);
-        console.log('checking for token data:', response.data.payload)
+        localStorage.setItem('token', response);
+        console.log('checking for token data:', response)
         formikBag.props.history.push('/');
-        formikBag.props.setToken(response.data.payload)
+        // formikBag.props.setToken(response)
       })
       .catch((e) => {
-        console.log(e.response.data);
+        console.log(e.response);
       })
   }
 }
