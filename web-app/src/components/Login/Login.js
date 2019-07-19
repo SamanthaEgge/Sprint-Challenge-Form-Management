@@ -9,13 +9,14 @@ import useToken from '../../hooks/useToken'
 import './Login.scss'
 
 function Login({ touched, errors}) {
-  // const token = localStorage.getItem('token');
   const [token, settingToken] = useToken()
   const [login, setLogin] = useState('login')
-  console.log(token)
+  // console.log(token)
 
-  if (token) {
-    return <Redirect to='/' />
+  if (token !== 'undefined') {
+    console.log('were in the redirect')
+    return (<Redirect to='/' />
+    )
   }
 
   const toggleLogin = (event) => {
@@ -94,7 +95,7 @@ export default withFormik({
         localStorage.setItem('token', response.data.token);
         console.log('checking for token data:', response.data.token)
         formikBag.props.history.push('/');
-        formikBag.props.setToken(response.data.token)
+        formikBag.props.settingToken(response.data.token)
       })
       .catch((e) => {
         console.log(e.response);
@@ -102,11 +103,11 @@ export default withFormik({
     axios
       .post('http://localhost:5000/api/register', values)
       .then((response) => {
-        // setToken(response.data.token)
+        formikBag.props.settingToken(response.data.token)
         localStorage.setItem('token', response.data.token)
         console.log('checking for token data:', response.data.token)
         formikBag.props.history.push('/');
-        formikBag.props.setToken(response.data.token)
+        formikBag.props.settingToken(response.data.token)
       })
       .catch((e) => {
         console.log(e.response);

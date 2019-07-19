@@ -1,20 +1,25 @@
 import React, { useState, useEffect }from 'react';
 import { Route, Link } from 'react-router-dom';
 import PrivateRoute from './utils/PrivateRoute'
+import useToken from './hooks/useToken'
 
 import './App.scss';
 import Login from './components/Login/Login'
 import Home from './components/Home/Home'
 
 function App() {
-  const [token, setToken] = useState(null)
+  const [token, settingToken] = useToken()
+  console.log('app CL', token)
 
-  useEffect(() => {
-    setToken(localStorage.getItem('token'))
-    console.log('testing for infinite loop')
-  }, [token]);
+    // this currently works, trying to implement custom hook
+  // const [token, setToken] = useState(null)
 
-  console.log('App CL token: ', token);
+  // useEffect(() => {
+  //   setToken(localStorage.getItem('token'))
+  //   console.log('testing for infinite loop')
+  // }, [token]);
+
+  // console.log('App CL token: ', token);
 
   return (
     <div className="app">
@@ -24,7 +29,7 @@ function App() {
           <Link className='app-link' to='/'>
             Home
           </Link>
-          {token === null ? (
+          {token === 'undefined' ? (
             <Link className='app-link' to='/login'>
               Login
             </Link>
@@ -32,7 +37,7 @@ function App() {
             <Link to='/login'>
               <button className='btn' onClick={() => {
                 localStorage.removeItem('token')
-                setToken()}} >
+                settingToken()}} >
                 Logout
               </button>
             </Link>
@@ -41,7 +46,7 @@ function App() {
       </header>
       <div className='app-body'>
         <PrivateRoute exact path='/' component={Home} />
-        <Route exact path='/login' render={(props) => <Login {...props} setToken={setToken} />} />
+        <Route exact path='/login' render={(props) => <Login {...props} token={token} settingToken={settingToken} />} />
       </div>
     </div>
   );
